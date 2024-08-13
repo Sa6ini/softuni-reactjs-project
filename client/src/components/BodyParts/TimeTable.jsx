@@ -4,14 +4,78 @@ const TimeTable = () => {
   const [activeTab, setActiveTab] = useState('tab-1');
   const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
   const scheduleItems = [
-    { time: '6.00am - 8.00am', className: 'Power Lifting', instructor: 'John Deo' },
-    { time: '8.00am - 10.00am', className: 'Body Building', instructor: 'James Taylor' },
-    { time: '10.00am - 12.00pm', className: 'Cardio Program', instructor: 'Jack Sparrow' },
-    { time: '12.00pm - 2.00pm', className: 'Weight Loose', instructor: 'Robert Smith' },
-    { time: '2.00pm - 4.00pm', className: 'Fitness Program', instructor: 'Adam Phillips' },
-    { time: '4.00pm - 6.00pm', className: 'Crossfit Class', instructor: 'James Alien' },
-    { time: '6.00pm - 8.00pm', className: 'Muscle Building', instructor: 'Petter John' },
-    { time: '8.00pm - 10.00pm', className: 'Yoga Class', instructor: 'Jessy Reo' },
+    [
+      { time: '6.00am - 8.00am', className: 'Power Lifting', instructor: 'John Deo' },
+      { time: '8.00am - 10.00am', className: 'Body Building', instructor: 'James Taylor' },
+      { time: '10.00am - 12.00pm', className: 'Cardio Program', instructor: 'Jack Sparrow' },
+      { time: '12.00pm - 2.00pm', className: 'Weight Loose', instructor: 'Robert Smith' },
+      { time: '2.00pm - 4.00pm', className: 'Fitness Program', instructor: 'Adam Phillips' },
+      { time: '4.00pm - 6.00pm', className: 'Crossfit Class', instructor: 'James Alien' },
+      { time: '6.00pm - 8.00pm', className: 'Muscle Building', instructor: 'Petter John' },
+      { time: '8.00pm - 10.00pm', className: 'Yoga Class', instructor: 'Jessy Reo' },
+    ],
+    [
+      { time: '6.00am - 8.00am', className: 'Cardio Program', instructor: 'Jack Sparrow' },
+      { time: '8.00am - 10.00am', className: 'Weight Loose', instructor: 'Robert Smith' },
+      { time: '10.00am - 12.00pm', className: 'Fitness Program', instructor: 'Adam Phillips' },
+      { time: '12.00pm - 2.00pm', className: 'Body Building', instructor: 'James Taylor' },
+      { time: '2.00pm - 4.00pm', className: 'Power Lifting', instructor: 'John Deo' },
+      { time: '4.00pm - 6.00pm', className: 'Yoga Class', instructor: 'Jessy Reo' },
+      { time: '6.00pm - 8.00pm', className: 'Crossfit Class', instructor: 'James Alien' },
+      { time: '8.00pm - 10.00pm', className: 'Muscle Building', instructor: 'Petter John' },
+    ],
+    [
+      { time: '6.00am - 8.00am', className: 'Power Lifting', instructor: 'John Deo' },
+      { time: '8.00am - 10.00am', className: 'Body Building', instructor: 'James Taylor' },
+      { time: '10.00am - 12.00pm', className: 'Cardio Program', instructor: 'Jack Sparrow' },
+      { time: '12.00pm - 2.00pm', className: 'Weight Loose', instructor: 'Robert Smith' },
+      { time: '2.00pm - 4.00pm', className: 'Fitness Program', instructor: 'Adam Phillips' },
+      { time: '4.00pm - 6.00pm', className: 'Crossfit Class', instructor: 'James Alien' },
+      { time: '6.00pm - 8.00pm', className: 'Muscle Building', instructor: 'Petter John' },
+      { time: '8.00pm - 10.00pm', className: 'Yoga Class', instructor: 'Jessy Reo' },
+    ],
+    [
+      { time: '7.00am - 9.00am', className: 'Yoga Class', instructor: 'Jessy Reo' },
+      { time: '9.00am - 11.00am', className: 'Fitness Program', instructor: 'Adam Phillips' },
+      { time: '11.00am - 1.00pm', className: 'Weight Loose', instructor: 'Robert Smith' },
+      { time: '1.00pm - 3.00pm', className: 'Body Building', instructor: 'James Taylor' },
+      { time: '3.00pm - 5.00pm', className: 'Cardio Program', instructor: 'Jack Sparrow' },
+      { time: '5.00pm - 7.00pm', className: 'Power Lifting', instructor: 'John Deo' },
+      { time: '7.00pm - 9.00pm', className: 'Crossfit Class', instructor: 'James Alien' },
+      { time: '9.00pm - 11.00pm', className: 'Muscle Building', instructor: 'Petter John' },
+    ],
+    [
+      { time: '7.00am - 9.00am', className: 'Yoga Class', instructor: 'Jessy Reo' },
+      { time: '9.00am - 11.00am', className: 'Fitness Program', instructor: 'Adam Phillips' },
+      { time: '11.00am - 1.00pm', className: 'Weight Loose', instructor: 'Robert Smith' },
+      { time: '1.00pm - 3.00pm', className: 'Body Building', instructor: 'James Taylor' },
+      { time: '3.00pm - 5.00pm', className: 'Cardio Program', instructor: 'Jack Sparrow' },
+      { time: '5.00pm - 7.00pm', className: 'Power Lifting', instructor: 'John Deo' },
+      { time: '7.00pm - 9.00pm', className: 'Crossfit Class', instructor: 'James Alien' },
+      { time: '9.00pm - 11.00pm', className: 'Muscle Building', instructor: 'Petter John' },
+    ],
+    [
+      { time: '6.00am - 8.00am', className: 'Cardio Program', instructor: 'Jack Sparrow' },
+      { time: '8.00am - 10.00am', className: 'Weight Loose', instructor: 'Robert Smith' },
+      { time: '10.00am - 12.00pm', className: 'Fitness Program', instructor: 'Adam Phillips' },
+      { time: '12.00pm - 2.00pm', className: 'Body Building', instructor: 'James Taylor' },
+      { time: '2.00pm - 4.00pm', className: 'Power Lifting', instructor: 'John Deo' },
+      { time: '4.00pm - 6.00pm', className: 'Yoga Class', instructor: 'Jessy Reo' },
+      { time: '6.00pm - 8.00pm', className: 'Crossfit Class', instructor: 'James Alien' },
+      { time: '8.00pm - 10.00pm', className: 'Muscle Building', instructor: 'Petter John' },
+    ],
+    [
+      { time: '6.00am - 8.00am', className: 'Cardio Program', instructor: 'Jack Sparrow' },
+      { time: '8.00am - 10.00am', className: 'Weight Loose', instructor: 'Robert Smith' },
+      { time: '10.00am - 12.00pm', className: 'Fitness Program', instructor: 'Adam Phillips' },
+      { time: '12.00pm - 2.00pm', className: 'Body Building', instructor: 'James Taylor' },
+      { time: '2.00pm - 4.00pm', className: 'Power Lifting', instructor: 'John Deo' },
+      { time: '4.00pm - 6.00pm', className: 'Yoga Class', instructor: 'Jessy Reo' },
+      { time: '6.00pm - 8.00pm', className: 'Crossfit Class', instructor: 'James Alien' },
+      { time: '8.00pm - 10.00pm', className: 'Muscle Building', instructor: 'Petter John' },
+    ],
+    
+
   ];
 
   return (
@@ -43,7 +107,7 @@ const TimeTable = () => {
               key={index}
             >
               <div className="row g-5">
-                {scheduleItems.map((item, itemIndex) => (
+                {scheduleItems[index].map((item, itemIndex) => (
                   <div className="col-lg-3 col-md-4 col-sm-6" key={itemIndex}>
                     <div className="bg-dark rounded text-center py-5 px-3">
                       <h6 className="text-uppercase text-light mb-3">{item.time}</h6>

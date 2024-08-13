@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom"
 export default function About() {
     return (
         <>
@@ -30,19 +31,22 @@ export default function About() {
                         <div className="rounded bg-dark p-5">
                             <ul className="nav nav-pills justify-content-between mb-3">
                                 <li className="nav-item w-50">
-                                    <a
+                                    <Link
+                                        to="/about"
                                         className="nav-link text-uppercase text-center w-100 active"
                                         data-bs-toggle="pill"
                                         href="#pills-1"
                                     >
                                         About Us
-                                    </a>
+                                    </Link>
                                 </li>
                                 <li className="nav-item w-50">
                                     <a
+                                        href="https://www.youtube.com/watch?v=S6UqgjaBt4w"
+                                        target="_blank"
                                         className="nav-link text-uppercase text-center w-100"
                                         data-bs-toggle="pill"
-                                        href="#pills-2"
+                                        
                                     >
                                         Why Choose Us
                                     </a>

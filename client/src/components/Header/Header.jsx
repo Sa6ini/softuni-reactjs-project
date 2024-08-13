@@ -1,6 +1,7 @@
 import React from "react";
 import { Navbar, Nav, NavDropdown, Container } from "react-bootstrap";
 import { useNavbarHover } from "./useNavbarHover";
+import { Link } from "react-router-dom";
 
 export default function Header() {
   useNavbarHover();
@@ -71,22 +72,22 @@ export default function Header() {
                 <Navbar.Toggle aria-controls="navbarCollapse" />
                 <Navbar.Collapse id="navbarCollapse">
                   <Nav className="me-auto mb-2 mb-lg-0">
-                    <Nav.Link href="index.html" className="nav-item nav-link active">
+                  <Nav.Link as={Link} to="" className="nav-item nav-link">
                       Home
                     </Nav.Link>
-                    <Nav.Link href="about.html" className="nav-item nav-link">
+                    <Nav.Link as={Link} to="/about" className="nav-item nav-link">
                       About
                     </Nav.Link>
-                    <Nav.Link href="class.html" className="nav-item nav-link">
+                    <Nav.Link as={Link} to="/classes" className="nav-item nav-link">
                       Classes
                     </Nav.Link>
-                    <Nav.Link href="team.html" className="nav-item nav-link">
+                    <Nav.Link as={Link} to="/trainers" className="nav-item nav-link">
                       Trainers
                     </Nav.Link>
-                    <Nav.Link href="testimonials.html" className="nav-item nav-link">
+                    <Nav.Link as={Link} to="/rewiews" className="nav-item nav-link">
                       Reviews
                     </Nav.Link>
-                    <Nav.Link href="contact.html" className="nav-item nav-link">
+                    <Nav.Link as={Link} to="/contact" className="nav-item nav-link">
                       Contact
                     </Nav.Link>
                   </Nav>

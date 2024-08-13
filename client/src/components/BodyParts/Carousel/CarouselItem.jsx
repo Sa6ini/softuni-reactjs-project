@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 export default function CarouselItem({ image, isActive }) {
   return (
@@ -13,9 +14,9 @@ export default function CarouselItem({ image, isActive }) {
           <a href="#" className="btn btn-primary py-md-3 px-md-5 me-3">
             Join Us
           </a>
-          <a href="#" className="btn btn-light py-md-3 px-md-5">
+          <Link to="/contact" className="btn btn-light py-md-3 px-md-5">
             Contact Us
-          </a>
+          </Link>
         </div>
       </div>
     </div>

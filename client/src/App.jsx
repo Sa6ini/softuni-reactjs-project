@@ -1,29 +1,32 @@
-import React from 'react'
-import './style.css'
-import './bootstrap.min.css'
-import Header from './components/Header/Header'
-import Body from './components/Body'
-import Footer from './components/Footer/Fotter'
-import BackToTopButton from './components/BodyParts/backToTop/BackToTopButton'
+import React from 'react';
+import './style.css';
+import './bootstrap.min.css';
+import Body from './components/Body';
+import BackToTopButton from './components/BodyParts/backToTop/BackToTopButton';
+import { BrowserRouter, Routes, Route, Outlet } from 'react-router-dom';
+import Layout from './components/Layout';
+import AboutPage from './components/Pages/AboutPage';
+import ClassesPage from './components/Pages/ClassesPage';
+import ContactPage from './components/Pages/ContactPage';
+import RewiesPage from './components/Pages/RewiesPage';
+import TrainersPage from './components/Pages/TrainersPage';
 
 function App() {
-
-
   return (
-    <>
-      <>
-        
-        <Header />
-        
-        <Body />
-        
-        <BackToTopButton />
-        
-        <Footer />
-      </>
-
-    </>
-  )
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Layout />}>
+          <Route index element={<Body />} />
+          <Route path='/about' element={<AboutPage/>} />
+          <Route path='/classes' element={<ClassesPage />} />
+          <Route path='/trainers' element={<TrainersPage/>} />
+          <Route path='/rewiews' element={<RewiesPage/>} />
+          <Route path='/contact' element={<ContactPage/>} />
+        </Route>
+      </Routes>
+      <BackToTopButton />
+    </BrowserRouter>
+  );
 }
 
-export default App
+export default App;
