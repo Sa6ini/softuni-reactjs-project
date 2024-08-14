@@ -11,23 +11,26 @@ import ContactPage from './components/Pages/ContactPage';
 import RewiesPage from './components/Pages/RewiesPage';
 import TrainersPage from './components/Pages/TrainersPage';
 import Login from './components/Pages/Login/Login';
-
+import { AuthProvider } from './context/AuthContext';
+import Profile from './components/Pages/ProfilePage';
 function App() {
   return (
-    <BrowserRouter>
+    <AuthProvider><BrowserRouter>
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<Body />} />
-          <Route path='/about' element={<AboutPage/>} />
+          <Route path='/about' element={<AboutPage />} />
           <Route path='/classes' element={<ClassesPage />} />
-          <Route path='/trainers' element={<TrainersPage/>} />
-          <Route path='/rewiews' element={<RewiesPage/>} />
-          <Route path='/contact' element={<ContactPage/>} />
-          <Route path='/login' element={<Login/>}/>
+          <Route path='/trainers' element={<TrainersPage />} />
+          <Route path='/rewiews' element={<RewiesPage />} />
+          <Route path='/contact' element={<ContactPage />} />
+          <Route path='/login' element={<Login />} />
+          <Route path="/profile" element={<Profile/>}></Route>
         </Route>
       </Routes>
       <BackToTopButton />
-    </BrowserRouter>
+    </BrowserRouter></AuthProvider>
+
   );
 }
 
