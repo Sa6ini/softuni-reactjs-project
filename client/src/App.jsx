@@ -10,6 +10,7 @@ import ClassesPage from './components/Pages/ClassesPage';
 import ContactPage from './components/Pages/ContactPage';
 import RewiesPage from './components/Pages/RewiesPage';
 import TrainersPage from './components/Pages/TrainersPage';
+import Login from './components/Pages/Login/Login';
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
           <Route path='/trainers' element={<TrainersPage/>} />
           <Route path='/rewiews' element={<RewiesPage/>} />
           <Route path='/contact' element={<ContactPage/>} />
+          <Route path='/login' element={<Login/>}/>
         </Route>
       </Routes>
       <BackToTopButton />

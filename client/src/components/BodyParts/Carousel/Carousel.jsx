@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import CarouselItem from "./CarouselItem";
 import CarouselControls from "./CarouselControls";
 
@@ -15,7 +15,6 @@ const carouselImages = [
     captionTitle: "Best Gym Center",
     captionText: "Grow Your Strength With Our Trainers",
   },
-  // Add more items as needed
 ];
 
 export default function Carousel() {
@@ -32,6 +31,14 @@ export default function Carousel() {
       prevIndex === carouselImages.length - 1 ? 0 : prevIndex + 1
     );
   };
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      handleNext();
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <div className="container-fluid p-0 mb-5">

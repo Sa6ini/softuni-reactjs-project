@@ -11,9 +11,9 @@ export default function CarouselItem({ image, isActive }) {
           <h1 className="display-2 text-white text-uppercase mb-md-4">
             {image.captionText}
           </h1>
-          <a href="#" className="btn btn-primary py-md-3 px-md-5 me-3">
+          <Link to="/login" className="btn btn-primary py-md-3 px-md-5 me-3">
             Join Us
-          </a>
+          </Link>
           <Link to="/contact" className="btn btn-light py-md-3 px-md-5">
             Contact Us
           </Link>

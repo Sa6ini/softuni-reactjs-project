@@ -11,12 +11,12 @@ export default function Header() {
       <div className="container-fluid bg-dark px-0">
         <div className="row gx-0">
           <div className="col-lg-3 bg-dark d-none d-lg-block">
-            <a
-              href="index.html"
+            <Link
+              to=""
               className="navbar-brand w-100 h-100 m-0 p-0 d-flex align-items-center justify-content-center"
             >
               <h1 className="m-0 display-4 text-primary text-uppercase">Gymster</h1>
-            </a>
+            </Link>
           </div>
           <div className="col-lg-9">
             <div className="row gx-0 bg-secondary d-none d-lg-flex">
@@ -64,7 +64,7 @@ export default function Header() {
             </div>
             <Navbar bg="dark" variant="dark" expand="lg" className="p-3 p-lg-0 px-lg-5">
               <Container fluid>
-                <Navbar.Brand href="index.html" className="d-block d-lg-none">
+                <Navbar.Brand as={Link} to="" className="d-block d-lg-none">
                   <h1 className="m-0 display-4 text-primary text-uppercase">
                     Gymster
                   </h1>
@@ -72,7 +72,7 @@ export default function Header() {
                 <Navbar.Toggle aria-controls="navbarCollapse" />
                 <Navbar.Collapse id="navbarCollapse">
                   <Nav className="me-auto mb-2 mb-lg-0">
-                  <Nav.Link as={Link} to="" className="nav-item nav-link">
+                    <Nav.Link as={Link} to="" className="nav-item nav-link">
                       Home
                     </Nav.Link>
                     <Nav.Link as={Link} to="/about" className="nav-item nav-link">
@@ -90,13 +90,14 @@ export default function Header() {
                     <Nav.Link as={Link} to="/contact" className="nav-item nav-link">
                       Contact
                     </Nav.Link>
+                    
                   </Nav>
-                  <a
-                    href="#"
+                  <Link
+                    to="/login"
                     className="btn btn-primary py-md-3 px-md-5 d-none d-lg-block"
                   >
                     Join Us
-                  </a>
+                  </Link>
                 </Navbar.Collapse>
               </Container>
             </Navbar>

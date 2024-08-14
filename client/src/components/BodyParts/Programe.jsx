@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom"
 export default function Programe() {
     return (
         <>
@@ -49,9 +50,9 @@ export default function Programe() {
                         <h1 className="text-uppercase text-light mb-4">
                             30% Discount For This Summer
                         </h1>
-                        <a href="" className="btn btn-primary py-3 px-5">
+                        <Link to="/login" className="btn btn-primary py-3 px-5">
                             Become A Member
-                        </a>
+                        </Link>
                     </div>
                 </div>
             </div>
