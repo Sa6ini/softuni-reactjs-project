@@ -5,6 +5,7 @@ const cookieParser = require('cookie-parser');
 const path = require('path');
 const cors = require('cors');
 const multer = require('multer');
+const { v4: uuidv4 } = require('uuid');
 require('dotenv').config();
 
 const app = express();
@@ -47,7 +48,7 @@ app.get('/', (req, res) => {
     res.send('Server is running');
 });
 
-app.post('/register', (req, res) => {
+app.post('/api/register', (req, res) => {
     const { fname, email, username, password } = req.body;
     const users = readUsers();
     const userExists = users.find(user => user.username === username || user.email === email);
@@ -56,14 +57,14 @@ app.post('/register', (req, res) => {
         return res.status(400).json({ message: 'User already exists' });
     }
 
-    const newUser = { fname, email, username, password, profilePicture: '' };
+    const newUser = { id: uuidv4(), fname, email, username, password, profilePicture: '' };
     users.push(newUser);
     writeUsers(users);
 
     res.status(200).json({ message: 'User registered successfully' });
 });
 
-app.post('/login', (req, res) => {
+app.post('/api/login', (req, res) => {
     const { username, password } = req.body;
     const users = readUsers();
     const user = users.find(user => user.username === username && user.password === password);
@@ -72,29 +73,29 @@ app.post('/login', (req, res) => {
         return res.status(400).json({ message: 'Invalid username or password' });
     }
 
-    res.cookie('authToken', username, { 
+    res.cookie('authToken', user.id, { 
         httpOnly: true, 
         secure: false, 
-        sameSite: 'None',
+        sameSite: 'Lax',
         maxAge: 24 * 60 * 60 * 1000 
     });
-    console.log(`Setting authToken cookie for user: ${username}`);
+
     res.status(200).json({ message: 'User logged in successfully' });
+    console.log(`Setting authToken cookie for user ID: ${user.id}`);
 });
 
-app.post('/upload-profile-picture', upload.single('profilePicture'), (req, res) => {
+app.post('/api/upload-profile-picture', upload.single('profilePicture'), (req, res) => {
     if (!req.file) {
         return res.status(400).json({ message: 'No file uploaded' });
     }
 
-    const username = req.cookies.authToken;
-    console.log(`Received cookie authToken: ${username}`);
-    if (!username) {
+    const userId = req.cookies.authToken;
+    if (!userId) {
         return res.status(401).json({ message: 'User not authenticated' });
     }
 
     const users = readUsers();
-    const user = users.find(user => user.username === username);
+    const user = users.find(user => user.id === userId);
 
     if (!user) {
         return res.status(404).json({ message: 'User not found' });
@@ -106,11 +107,11 @@ app.post('/upload-profile-picture', upload.single('profilePicture'), (req, res) 
     res.status(200).json({ message: 'Profile picture updated successfully' });
 });
 
-app.get('/user', (req, res) => {
-    console.log(`Cookies in /user: ${JSON.stringify(req.cookies)}`);
-    if (req.cookies && req.cookies.authToken) {
+app.get('/api/user', (req, res) => {
+    const userId = req.cookies.authToken;
+    if (userId) {
         const users = readUsers();
-        const user = users.find(user => user.username === req.cookies.authToken);
+        const user = users.find(user => user.id === userId);
 
         if (user) {
             res.status(200).json({ user: user });
@@ -120,6 +121,15 @@ app.get('/user', (req, res) => {
     } else {
         res.status(400).json({ message: 'No cookie found' });
     }
+});
+
+app.post('/api/logout', (req, res) => {
+    res.clearCookie('authToken', { 
+        httpOnly: true, 
+        secure: false, 
+        sameSite: 'Lax'
+    });
+    res.status(200).json({ message: 'User logged out successfully' });
 });
 
 app.use('/uploads', express.static(profilePicturesPath));

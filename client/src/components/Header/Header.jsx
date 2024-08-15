@@ -1,10 +1,27 @@
-import React from "react";
-import { Navbar, Nav, NavDropdown, Container } from "react-bootstrap";
-import { useNavbarHover } from "./useNavbarHover";
+import React, { useEffect, useState } from "react";
+import { Navbar, Nav, Container } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import axios from 'axios';
+import { useNavbarHover } from "./useNavbarHover";
 
 export default function Header() {
   useNavbarHover();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+ 
+  useEffect(() => {
+    const checkAuthStatus = async () => {
+      try {
+        const response = await axios.get('http://localhost:3000/api/user', {
+          withCredentials: true
+        });
+        setIsLoggedIn(response.status === 200);
+      } catch (err) {
+        setIsLoggedIn(false);
+      }
+    };
+
+    checkAuthStatus();
+  }, []);
 
   return (
     <>
@@ -14,6 +31,7 @@ export default function Header() {
             <Link
               to=""
               className="navbar-brand w-100 h-100 m-0 p-0 d-flex align-items-center justify-content-center"
+              
             >
               <h1 className="m-0 display-4 text-primary text-uppercase">Gymster</h1>
             </Link>
@@ -72,10 +90,10 @@ export default function Header() {
                 <Navbar.Toggle aria-controls="navbarCollapse" />
                 <Navbar.Collapse id="navbarCollapse">
                   <Nav className="me-auto mb-2 mb-lg-0">
-                    <Nav.Link as={Link} to="" className="nav-item nav-link">
+                    <Nav.Link as={Link} to=""  className="nav-item nav-link">
                       Home
                     </Nav.Link>
-                    <Nav.Link as={Link} to="/about" className="nav-item nav-link">
+                    <Nav.Link as={Link} to="/about"  className="nav-item nav-link">
                       About
                     </Nav.Link>
                     <Nav.Link as={Link} to="/classes" className="nav-item nav-link">
@@ -84,20 +102,28 @@ export default function Header() {
                     <Nav.Link as={Link} to="/trainers" className="nav-item nav-link">
                       Trainers
                     </Nav.Link>
-                    <Nav.Link as={Link} to="/rewiews" className="nav-item nav-link">
+                    <Nav.Link as={Link} to="/reviews" className="nav-item nav-link">
                       Reviews
                     </Nav.Link>
                     <Nav.Link as={Link} to="/contact" className="nav-item nav-link">
                       Contact
                     </Nav.Link>
-                    
                   </Nav>
-                  <Link
-                    to="/login"
-                    className="btn btn-primary py-md-3 px-md-5 d-none d-lg-block"
-                  >
-                    Join Us
-                  </Link>
+                  {isLoggedIn ? (
+                    <Link
+                      to="/profile"
+                      className="btn btn-primary py-md-3 px-md-5 d-lg-block"
+                    >
+                      Profile
+                    </Link>
+                  ) : (
+                    <Link
+                      to="/login"
+                      className="btn btn-primary py-md-3 px-md-5 d-lg-block"
+                    >
+                      Join Us
+                    </Link>
+                  )}
                 </Navbar.Collapse>
               </Container>
             </Navbar>

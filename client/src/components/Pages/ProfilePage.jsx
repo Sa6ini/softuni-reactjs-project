@@ -61,6 +61,16 @@ const Profile = () => {
         }
     };
 
+    const handleLogout = async () => {
+        try {
+            await axios.post('http://localhost:3000/api/logout', {}, { withCredentials: true });
+            navigate('/login');
+        } catch (err) {
+            console.error('Error logging out:', err);
+            alert('Error logging out');
+        }
+    };
+
     if (loading) return <p>Loading...</p>;
     if (error) return <p>Error: {error}</p>;
 
@@ -71,8 +81,7 @@ const Profile = () => {
                 <div className="profile-info">
                     <div className="profile-picture">
                         <img
-                            src={user.profilePicture ? `http://localhost:3000/${user.profilePicture}` : 'default-profile.png'}
-                            alt="Profile"
+                            src={`http://localhost:3000/${user.profilePicture}`}
                             width="150"
                             height="150"
                         />
@@ -90,6 +99,7 @@ const Profile = () => {
                             {uploading ? 'Uploading...' : 'Upload Profile Picture'}
                         </button>
                     </div>
+                    <button onClick={handleLogout}>Log Out</button>
                 </div>
             ) : (
                 <p>No user data available</p>

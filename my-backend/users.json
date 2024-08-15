@@ -3,7 +3,8 @@
     "fname": "f",
     "email": "f@gmail.com",
     "username": "f",
-    "password": "f"
+    "password": "f",
+    "profilePicture": "uploads/profile_pictures/1723715009128-857517889.png"
   },
   {
     "fname": "Zaza Felix",
@@ -16,5 +17,35 @@
     "email": "amilev@gmail.com",
     "username": "amilev",
     "password": "123"
+  },
+  {
+    "fname": "deni",
+    "email": "deni@gmail.com",
+    "username": "Typ4o",
+    "password": "123",
+    "profilePicture": ""
+  },
+  {
+    "fname": "d",
+    "email": "d@email.com",
+    "username": "d",
+    "password": "d",
+    "profilePicture": ""
+  },
+  {
+    "id": "9f168a15-dbf0-4816-aa16-4787f86bb5d2",
+    "fname": "g",
+    "email": "g@gmail.com",
+    "username": "g",
+    "password": "g",
+    "profilePicture": ""
+  },
+  {
+    "id": "986d71d8-de8f-415a-ad74-84ef19313933",
+    "fname": "h",
+    "email": "h@hmail.com",
+    "username": "h",
+    "password": "h",
+    "profilePicture": ""
   }
 ]
