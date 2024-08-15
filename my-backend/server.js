@@ -1,13 +1,16 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const fs = require('fs');
 const cookieParser = require('cookie-parser');
-const cors = require('cors');
 const path = require('path');
+const cors = require('cors');
+const multer = require('multer');
 require('dotenv').config();
 
 const app = express();
 const port = process.env.PORT || 3000;
 const usersFilePath = path.join(__dirname, 'users.json');
+const profilePicturesPath = path.join(__dirname, 'uploads/profile_pictures');
 
 app.use(bodyParser.json());
 app.use(cookieParser());
@@ -16,18 +19,58 @@ app.use(cors({
     credentials: true
 }));
 
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, profilePicturesPath);
+    },
+    filename: (req, file, cb) => {
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+        cb(null, uniqueSuffix + path.extname(file.originalname));
+    }
+});
+
+const upload = multer({ storage: storage });
+
 const readUsers = () => {
-    if (!fs.existsSync(usersFilePath)) return [];
+    if (!fs.existsSync(usersFilePath)) {
+        return [];
+    }
     const data = fs.readFileSync(usersFilePath);
     return JSON.parse(data);
 };
+
+const writeUsers = (users) => {
+    fs.writeFileSync(usersFilePath, JSON.stringify(users, null, 2));
+};
+
+app.get('/', (req, res) => {
+    res.send('Server is running');
+});
+
+app.post('/api/register', (req, res) => {
+    const { fname, email, username, password } = req.body;
+    const users = readUsers();
+    const userExists = users.find(user => user.username === username || user.email === email);
+
+    if (userExists) {
+        return res.status(400).json({ message: 'User already exists' });
+    }
+
+    const newUser = { fname, email, username, password, profilePicture: '' };
+    users.push(newUser);
+    writeUsers(users);
+
+    res.status(200).json({ message: 'User registered successfully' });
+});
 
 app.post('/api/login', (req, res) => {
     const { username, password } = req.body;
     const users = readUsers();
     const user = users.find(user => user.username === username && user.password === password);
 
-    if (!user) return res.status(400).json({ message: 'Invalid username or password' });
+    if (!user) {
+        return res.status(400).json({ message: 'Invalid username or password' });
+    }
 
     res.cookie('authToken', username, { 
         httpOnly: true, 
@@ -35,8 +78,30 @@ app.post('/api/login', (req, res) => {
         sameSite: 'None', 
         maxAge: 24 * 60 * 60 * 1000 
     });
-
     res.status(200).json({ message: 'User logged in successfully' });
+});
+
+app.post('/api/upload-profile-picture', upload.single('profilePicture'), (req, res) => {
+    if (!req.file) {
+        return res.status(400).json({ message: 'No file uploaded' });
+    }
+
+    const username = req.cookies.authToken;
+    if (!username) {
+        return res.status(401).json({ message: 'User not authenticated' });
+    }
+
+    const users = readUsers();
+    const user = users.find(user => user.username === username);
+
+    if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+    }
+
+    user.profilePicture = `uploads/profile_pictures/${req.file.filename}`;
+    writeUsers(users);
+
+    res.status(200).json({ message: 'Profile picture updated successfully' });
 });
 
 app.get('/api/user', (req, res) => {
@@ -53,6 +118,8 @@ app.get('/api/user', (req, res) => {
         res.status(400).json({ message: 'No cookie found' });
     }
 });
+
+app.use('/uploads', express.static(profilePicturesPath));
 
 app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);
