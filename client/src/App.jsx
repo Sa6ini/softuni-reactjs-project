@@ -8,7 +8,7 @@ import Layout from './components/Layout';
 import AboutPage from './components/Pages/AboutPage';
 import ClassesPage from './components/Pages/ClassesPage';
 import ContactPage from './components/Pages/ContactPage';
-import RewiesPage from './components/Pages/RewiesPage';
+import RewiewsPage from './components/Pages/RewiewsPage';
 import TrainersPage from './components/Pages/TrainersPage';
 import Login from './components/Pages/Login/Login';
 import { AuthProvider } from './context/AuthContext';
@@ -22,7 +22,7 @@ function App() {
           <Route path='/about' element={<AboutPage />} />
           <Route path='/classes' element={<ClassesPage />} />
           <Route path='/trainers' element={<TrainersPage />} />
-          <Route path='/rewiews' element={<RewiesPage />} />
+          <Route path='/reviews' element={<RewiewsPage />} />
           <Route path='/contact' element={<ContactPage />} />
           <Route path='/login' element={<Login />} />
           <Route path="/profile" element={<Profile/>}></Route>
