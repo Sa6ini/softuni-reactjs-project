@@ -47,7 +47,7 @@ app.get('/', (req, res) => {
     res.send('Server is running');
 });
 
-app.post('/api/register', (req, res) => {
+app.post('/register', (req, res) => {
     const { fname, email, username, password } = req.body;
     const users = readUsers();
     const userExists = users.find(user => user.username === username || user.email === email);
@@ -63,7 +63,7 @@ app.post('/api/register', (req, res) => {
     res.status(200).json({ message: 'User registered successfully' });
 });
 
-app.post('/api/login', (req, res) => {
+app.post('/login', (req, res) => {
     const { username, password } = req.body;
     const users = readUsers();
     const user = users.find(user => user.username === username && user.password === password);
@@ -75,18 +75,20 @@ app.post('/api/login', (req, res) => {
     res.cookie('authToken', username, { 
         httpOnly: true, 
         secure: false, 
-        sameSite: 'None', 
+        sameSite: 'None',
         maxAge: 24 * 60 * 60 * 1000 
     });
+    console.log(`Setting authToken cookie for user: ${username}`);
     res.status(200).json({ message: 'User logged in successfully' });
 });
 
-app.post('/api/upload-profile-picture', upload.single('profilePicture'), (req, res) => {
+app.post('/upload-profile-picture', upload.single('profilePicture'), (req, res) => {
     if (!req.file) {
         return res.status(400).json({ message: 'No file uploaded' });
     }
 
     const username = req.cookies.authToken;
+    console.log(`Received cookie authToken: ${username}`);
     if (!username) {
         return res.status(401).json({ message: 'User not authenticated' });
     }
@@ -104,7 +106,8 @@ app.post('/api/upload-profile-picture', upload.single('profilePicture'), (req, r
     res.status(200).json({ message: 'Profile picture updated successfully' });
 });
 
-app.get('/api/user', (req, res) => {
+app.get('/user', (req, res) => {
+    console.log(`Cookies in /user: ${JSON.stringify(req.cookies)}`);
     if (req.cookies && req.cookies.authToken) {
         const users = readUsers();
         const user = users.find(user => user.username === req.cookies.authToken);

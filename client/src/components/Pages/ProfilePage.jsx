@@ -15,7 +15,7 @@ const Profile = () => {
         const fetchUser = async () => {
             try {
                 const response = await axios.get('http://localhost:3000/api/user', {
-                    withCredentials: true // Include cookies in the request
+                    withCredentials: true 
                 });
                 setUser(response.data.user);
                 setLoading(false);
@@ -23,7 +23,7 @@ const Profile = () => {
                 setError(err.response ? err.response.data.message : 'Error fetching user data');
                 setLoading(false);
                 if (err.response && err.response.status === 401) {
-                    navigate('/login'); // Redirect to login if unauthorized
+                    navigate('/login'); 
                 }
             }
         };
