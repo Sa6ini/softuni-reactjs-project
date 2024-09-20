@@ -11,7 +11,7 @@ require('dotenv').config();
 const app = express();
 const port = process.env.PORT || 3000;
 const usersFilePath = path.join(__dirname, 'users.json');
-const profilePicturesPath = path.join(__dirname, 'uploads/profile_pictures');
+const profilePicturesPath = path.join(__dirname, '/uploads/profile_pictures');
 
 app.use(bodyParser.json());
 app.use(cookieParser());
@@ -57,7 +57,15 @@ app.post('/api/register', (req, res) => {
         return res.status(400).json({ message: 'User already exists' });
     }
 
-    const newUser = { id: uuidv4(), fname, email, username, password, profilePicture: '' };
+    const newUser = {
+        id: uuidv4(),
+        fname,
+        email,
+        username,
+        password,
+        profilePicture: '',
+        role: 'user'
+    };
     users.push(newUser);
     writeUsers(users);
 
@@ -73,18 +81,18 @@ app.post('/api/login', (req, res) => {
         return res.status(400).json({ message: 'Invalid username or password' });
     }
 
-    res.cookie('authToken', user.id, { 
-        httpOnly: true, 
-        secure: false, 
+    res.cookie('authToken', user.id, {
+        httpOnly: true,
+        secure: false,
         sameSite: 'Lax',
-        maxAge: 24 * 60 * 60 * 1000 
+        maxAge: 24 * 60 * 60 * 1000
     });
 
     res.status(200).json({ message: 'User logged in successfully' });
     console.log(`Setting authToken cookie for user ID: ${user.id}`);
 });
 
-app.post('/api/upload-profile-picture', upload.single('profilePicture'), (req, res) => {
+app.post('/api/upload/profile_pictures', upload.single('profilePicture'), (req, res) => {
     if (!req.file) {
         return res.status(400).json({ message: 'No file uploaded' });
     }
@@ -101,7 +109,8 @@ app.post('/api/upload-profile-picture', upload.single('profilePicture'), (req, r
         return res.status(404).json({ message: 'User not found' });
     }
 
-    user.profilePicture = `uploads/profile_pictures/${req.file.filename}`;
+    const profilePictureUrl = `${req.protocol}://${req.get('host')}/uploads/profile_pictures/${req.file.filename}`;
+    user.profilePicture = profilePictureUrl;
     writeUsers(users);
 
     res.status(200).json({ message: 'Profile picture updated successfully' });
@@ -124,9 +133,9 @@ app.get('/api/user', (req, res) => {
 });
 
 app.post('/api/logout', (req, res) => {
-    res.clearCookie('authToken', { 
-        httpOnly: true, 
-        secure: false, 
+    res.clearCookie('authToken', {
+        httpOnly: true,
+        secure: false,
         sameSite: 'Lax'
     });
     res.status(200).json({ message: 'User logged out successfully' });

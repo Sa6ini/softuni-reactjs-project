@@ -117,7 +117,7 @@ export default function Footer() {
               <p className="text-light mb-0">
                 Build by{" "}
                 <a className="text-light fw-bold" href="https://github.com/Sa6ini">
-                  ZazaFelix
+                  Sa6ini
                 </a>
               </p>
             </div>

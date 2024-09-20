@@ -89,6 +89,7 @@ const Profile = () => {
                     <p><strong>Name:</strong> {user.fname}</p>
                     <p><strong>Email:</strong> {user.email}</p>
                     <p><strong>Username:</strong> {user.username}</p>
+                    <p><strong>Role:</strong> {user.role}</p>
                     <div className="upload-section">
                         <input
                             type="file"

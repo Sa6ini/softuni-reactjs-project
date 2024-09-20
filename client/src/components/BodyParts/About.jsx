@@ -35,7 +35,6 @@ export default function About() {
                                         to="/about"
                                         className="nav-link text-uppercase text-center w-100 active"
                                         data-bs-toggle="pill"
-                                        href="#pills-1"
                                     >
                                         About Us
                                     </Link>

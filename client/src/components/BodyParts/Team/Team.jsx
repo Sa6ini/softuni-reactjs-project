@@ -1,12 +1,12 @@
 import TeamMember from "./TeamMember"
 import React from "react"
-export default function Team() {
+export default function Team({title1,title2}) {
     return (
         <>
             <div className="container-fluid p-5">
                 <div className="mb-5 text-center">
-                    <h5 className="text-primary text-uppercase">The Team</h5>
-                    <h1 className="display-3 text-uppercase mb-0">Expert Trainers</h1>
+                    <h5 className="text-primary text-uppercase">{title1}</h5>
+                    <h1 className="display-3 text-uppercase mb-0">{title2}</h1>
                 </div>
                 <div className="row g-5">
                     <TeamMember

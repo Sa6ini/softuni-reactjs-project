@@ -30,22 +30,22 @@ export default function Facts() {
     const startCounter = () => {
         timerRef.current = setInterval(() => {
             setExperience(prevExperience => {
-                if (prevExperience < 123) return prevExperience + 1;
+                if (prevExperience < 777) return prevExperience + 1;
                 return prevExperience;
             });
             setTrainers(prevTrainers => {
-                if (prevTrainers < 123) return prevTrainers + 1;
+                if (prevTrainers < 777) return prevTrainers + 1;
                 return prevTrainers;
             });
             setProjects(prevProjects => {
-                if (prevProjects < 123) return prevProjects + 1;
+                if (prevProjects < 777) return prevProjects + 1;
                 return prevProjects;
             });
             setClients(prevClients => {
-                if (prevClients < 123) return prevClients + 1;
+                if (prevClients < 777) return prevClients + 1;
                 return prevClients;
             });
-        }, 10);
+        }, 1);
     };
 
     return (

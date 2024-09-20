@@ -4,9 +4,9 @@ import Hero from "../BodyParts/Hero"
 export default function TrainersPage() {
     return (
         <>
-            <Hero name="Trainers"/>
+            <Hero name="Trainers" />
 
-            <Team />
+            <Team title1="The Team" title2="Expert Trainers" />
         </>
     )
 }

@@ -7,7 +7,8 @@ import { useNavbarHover } from "./useNavbarHover";
 export default function Header() {
   useNavbarHover();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
- 
+  const [userRole, setUserRole] = useState(null);
+
   useEffect(() => {
     const checkAuthStatus = async () => {
       try {
@@ -15,6 +16,7 @@ export default function Header() {
           withCredentials: true
         });
         setIsLoggedIn(response.status === 200);
+        setUserRole(response.data.user.role);
       } catch (err) {
         setIsLoggedIn(false);
       }
@@ -31,7 +33,7 @@ export default function Header() {
             <Link
               to=""
               className="navbar-brand w-100 h-100 m-0 p-0 d-flex align-items-center justify-content-center"
-              
+
             >
               <h1 className="m-0 display-4 text-primary text-uppercase">Gymster</h1>
             </Link>
@@ -90,10 +92,10 @@ export default function Header() {
                 <Navbar.Toggle aria-controls="navbarCollapse" />
                 <Navbar.Collapse id="navbarCollapse">
                   <Nav className="me-auto mb-2 mb-lg-0">
-                    <Nav.Link as={Link} to=""  className="nav-item nav-link">
+                    <Nav.Link as={Link} to="" className="nav-item nav-link">
                       Home
                     </Nav.Link>
-                    <Nav.Link as={Link} to="/about"  className="nav-item nav-link">
+                    <Nav.Link as={Link} to="/about" className="nav-item nav-link">
                       About
                     </Nav.Link>
                     <Nav.Link as={Link} to="/classes" className="nav-item nav-link">
@@ -108,6 +110,11 @@ export default function Header() {
                     <Nav.Link as={Link} to="/contact" className="nav-item nav-link">
                       Contact
                     </Nav.Link>
+                    {userRole === 'boss' && ( 
+                      <Nav.Link as={Link} to="/users" className="nav-item nav-link">
+                        Users
+                      </Nav.Link>
+                    )}
                   </Nav>
                   {isLoggedIn ? (
                     <Link
@@ -124,6 +131,7 @@ export default function Header() {
                       Join Us
                     </Link>
                   )}
+
                 </Navbar.Collapse>
               </Container>
             </Navbar>
