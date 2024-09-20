@@ -198,6 +198,16 @@ h6,
     width: 90px;
     height: 90px;
 }
+.users-table{
+    background-color: #FB5B21;
+    border-width: 1px;
+    border-color:#222429;
+    color: #222429;
+}
+.button-spacing {
+    margin-right: 10px;
+  }
+  
 
 
 

@@ -1,12 +1,20 @@
-in client part:
-i react-bootstrap
-i react-router-dom for Link
+dependencies in client part:
+        "axios": "^1.7.4",
+        "body-parser": "^1.20.2",
+        "bootstrap": "^5.3.3",
+        "express": "^4.19.2",
+        "react": "^18.3.1",
+        "react-bootstrap": "^2.10.4",
+        "react-dom": "^18.3.1",
+        "react-router-dom": "^6.26.0"
 
-in my-backend:
-npm install express body-parser
-npm install dotenv
-npm install fs
-npm install cors
-npm install multer
+dependencies in my-backend:
+    "body-parser": "^1.20.2",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "multer": "^1.4.5-lts.1",
+    "uuid": "^10.0.0"
 
-the backend doesn't work properly. The cookie isn't sending. The site still need some fixes.
+

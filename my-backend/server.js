@@ -131,6 +131,42 @@ app.get('/api/user', (req, res) => {
         res.status(400).json({ message: 'No cookie found' });
     }
 });
+app.get('/api/users', (req, res) => {
+    const users = readUsers();
+    res.status(200).json(users);
+});
+app.delete('/api/users/:id', (req, res) => {
+    const userId = req.params.id;
+    let users = readUsers();
+
+    const userIndex = users.findIndex(user => user.id === userId);
+
+    if (userIndex !== -1) {
+        users.splice(userIndex, 1);
+        writeUsers(users);
+        return res.status(200).json({ message: 'User deleted successfully' });
+    } else {
+        return res.status(404).json({ message: 'User not found' });
+    }
+});
+
+app.put('/api/users/:id/role', (req, res) => {
+    const userId = req.params.id;
+    const { role } = req.body;
+    let users = readUsers();
+
+    const userIndex = users.findIndex(user => user.id === userId);
+
+    if (userIndex !== -1) {
+        users[userIndex].role = role;
+        writeUsers(users);
+        return res.status(200).json({ message: 'Role updated successfully' });
+    } else {
+        return res.status(404).json({ message: 'User not found' });
+    }
+});
+
+
 
 app.post('/api/logout', (req, res) => {
     res.clearCookie('authToken', {
