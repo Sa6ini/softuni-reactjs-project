@@ -1,30 +1,12 @@
 [
   {
-    "id": "9f168a15-dbf0-4816-aa16-4787f86bb5d2",
-    "fname": "g",
-    "email": "g@gmail.com",
-    "username": "g",
-    "password": "g",
-    "profilePicture": "",
-    "role": "user"
-  },
-  {
-    "id": "986d71d8-de8f-415a-ad74-84ef19313933",
-    "fname": "h",
-    "email": "h@hmail.com",
-    "username": "h",
-    "password": "h",
-    "profilePicture": "uploads/profile_pictures/1723760288155-321031395.jpg",
-    "role": "user"
-  },
-  {
     "id": "960f0884-9ac4-4cb9-96d3-79989a6caa8f",
     "fname": "k",
     "email": "k@kmail.com",
     "username": "k",
     "password": "k",
     "profilePicture": "",
-    "role": "user"
+    "role": "worker"
   },
   {
     "id": "fefbb9a4-5628-4dc6-be40-cfb31ba71d1b",
@@ -34,5 +16,14 @@
     "password": "a",
     "profilePicture": "uploads/profile_pictures/1726323317431-447238216.JPG",
     "role": "boss"
+  },
+  {
+    "id": "09628609-27c1-4d50-8f71-fec3ef33d004",
+    "fname": "goshko",
+    "email": "goshko@email.com",
+    "username": "Goshko",
+    "password": "gg",
+    "profilePicture": "",
+    "role": "user"
   }
 ]

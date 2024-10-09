@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import Hero from '../BodyParts/Hero';
+import Profile from '../BodyParts/Profile';
 
-const Profile = () => {
+const ProfilePage = () => {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -15,7 +17,7 @@ const Profile = () => {
         const fetchUser = async () => {
             try {
                 const response = await axios.get('http://localhost:3000/api/user', {
-                    withCredentials: true 
+                    withCredentials: true
                 });
                 setUser(response.data.user);
                 setLoading(false);
@@ -23,7 +25,7 @@ const Profile = () => {
                 setError(err.response ? err.response.data.message : 'Error fetching user data');
                 setLoading(false);
                 if (err.response && err.response.status === 401) {
-                    navigate('/login'); 
+                    navigate('/login');
                 }
             }
         };
@@ -44,7 +46,7 @@ const Profile = () => {
         setUploading(true);
 
         try {
-            const response = await axios.post('http://localhost:3000/api/upload-profile-picture', formData, {
+            const response = await axios.post('http://localhost:3000/api/uploads/profile-picture', formData, {
                 withCredentials: true,
                 headers: { 'Content-Type': 'multipart/form-data' }
             });
@@ -76,20 +78,20 @@ const Profile = () => {
 
     return (
         <div className="profile-container">
-            <h1>Profile</h1>
+            <Hero name="Profile" />
+
+            <Profile
+                name={user.fname}
+                username={user.username}
+                email={user.email}
+                role={user.role}
+                image={`${user.profilePicture}`}
+            />
+
+
             {user ? (
+
                 <div className="profile-info">
-                    <div className="profile-picture">
-                        <img
-                            src={`http://localhost:3000/${user.profilePicture}`}
-                            width="150"
-                            height="150"
-                        />
-                    </div>
-                    <p><strong>Name:</strong> {user.fname}</p>
-                    <p><strong>Email:</strong> {user.email}</p>
-                    <p><strong>Username:</strong> {user.username}</p>
-                    <p><strong>Role:</strong> {user.role}</p>
                     <div className="upload-section">
                         <input
                             type="file"
@@ -109,4 +111,4 @@ const Profile = () => {
     );
 };
 
-export default Profile;
+export default ProfilePage;

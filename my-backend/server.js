@@ -19,6 +19,7 @@ app.use(cors({
     origin: 'http://localhost:5173',
     credentials: true
 }));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -92,28 +93,20 @@ app.post('/api/login', (req, res) => {
     console.log(`Setting authToken cookie for user ID: ${user.id}`);
 });
 
-app.post('/api/upload/profile_pictures', upload.single('profilePicture'), (req, res) => {
-    if (!req.file) {
-        return res.status(400).json({ message: 'No file uploaded' });
-    }
+app.get('/api/user/profile-picture/:filename', (req, res) => {
+    const filename = req.params.filename;
+    const filePath = path.join(__dirname, 'uploads', 'profile_pictures', filename);
 
-    const userId = req.cookies.authToken;
-    if (!userId) {
-        return res.status(401).json({ message: 'User not authenticated' });
-    }
+    res.sendFile(filePath, (err) => {
+        if (err) {
+            console.error('Error sending file:', err);
+            res.status(404).json({ message: 'Profile picture not found' });
+        }
+    });
+});
 
-    const users = readUsers();
-    const user = users.find(user => user.id === userId);
+app.get('/uploads/*', (req, res) => {
 
-    if (!user) {
-        return res.status(404).json({ message: 'User not found' });
-    }
-
-    const profilePictureUrl = `${req.protocol}://${req.get('host')}/uploads/profile_pictures/${req.file.filename}`;
-    user.profilePicture = profilePictureUrl;
-    writeUsers(users);
-
-    res.status(200).json({ message: 'Profile picture updated successfully' });
 });
 
 app.get('/api/user', (req, res) => {
@@ -138,17 +131,19 @@ app.get('/api/users', (req, res) => {
 app.delete('/api/users/:id', (req, res) => {
     const userId = req.params.id;
     let users = readUsers();
-
+    
     const userIndex = users.findIndex(user => user.id === userId);
-
+    
     if (userIndex !== -1) {
-        users.splice(userIndex, 1);
-        writeUsers(users);
+        users.splice(userIndex, 1); // Remove the user from the array
+        writeUsers(users); // Save updated users to the file
         return res.status(200).json({ message: 'User deleted successfully' });
     } else {
         return res.status(404).json({ message: 'User not found' });
     }
 });
+
+
 
 app.put('/api/users/:id/role', (req, res) => {
     const userId = req.params.id;

@@ -206,11 +206,11 @@ h6,
 }
 .button-spacing {
     margin-right: 10px;
-  }
-  
-
-
-
+}
+.choose-file{
+    padding-top: 135%;
+    margin-bottom: 0%;
+}
 @media (min-width: 991.98px) {
     .credit {
         background: var(--primary);

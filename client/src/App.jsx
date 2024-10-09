@@ -12,7 +12,7 @@ import RewiewsPage from './components/Pages/RewiewsPage';
 import TrainersPage from './components/Pages/TrainersPage';
 import Login from './components/Pages/Login/Login';
 import { AuthProvider } from './context/AuthContext';
-import Profile from './components/Pages/ProfilePage';
+import ProfilePage from './components/Pages/ProfilePage';
 import UsersTable from './components/Pages/UsersTable';
 function App() {
   return (
@@ -28,7 +28,7 @@ function App() {
           <Route path='/users' element={<UsersTable/>} />
           
           <Route path='/login' element={<Login />} />
-          <Route path="/profile" element={<Profile/>} />
+          <Route path="/profile" element={<ProfilePage/>} />
         </Route>
       </Routes>
       <BackToTopButton />
