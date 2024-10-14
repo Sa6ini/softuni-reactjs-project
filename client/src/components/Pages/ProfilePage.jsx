@@ -8,12 +8,9 @@ const ProfilePage = () => {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [selectedFile, setSelectedFile] = useState(null);
-    const [uploading, setUploading] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
-        // Fetch user data
         const fetchUser = async () => {
             try {
                 const response = await axios.get('http://localhost:3000/api/user', {
@@ -32,36 +29,6 @@ const ProfilePage = () => {
 
         fetchUser();
     }, [navigate]);
-
-    const handleFileChange = (event) => {
-        setSelectedFile(event.target.files[0]);
-    };
-
-    const handleUpload = async () => {
-        if (!selectedFile) return;
-
-        const formData = new FormData();
-        formData.append('profilePicture', selectedFile);
-
-        setUploading(true);
-
-        try {
-            const response = await axios.post('http://localhost:3000/api/uploads/profile-picture', formData, {
-                withCredentials: true,
-                headers: { 'Content-Type': 'multipart/form-data' }
-            });
-            setUser(prevUser => ({
-                ...prevUser,
-                profilePicture: response.data.filePath
-            }));
-            alert('Profile picture updated successfully');
-        } catch (err) {
-            console.error('Error uploading file:', err);
-            alert('Error uploading profile picture');
-        } finally {
-            setUploading(false);
-        }
-    };
 
     const handleLogout = async () => {
         try {
@@ -85,28 +52,13 @@ const ProfilePage = () => {
                 username={user.username}
                 email={user.email}
                 role={user.role}
-                image={`${user.profilePicture}`}
+                image={user.profilePicture ? `http://localhost:3000${user.profilePicture}` : './img/default-profile.png'}
+                setUser={setUser}
             />
 
-
-            {user ? (
-
-                <div className="profile-info">
-                    <div className="upload-section">
-                        <input
-                            type="file"
-                            onChange={handleFileChange}
-                            disabled={uploading}
-                        />
-                        <button onClick={handleUpload} disabled={uploading}>
-                            {uploading ? 'Uploading...' : 'Upload Profile Picture'}
-                        </button>
-                    </div>
-                    <button onClick={handleLogout}>Log Out</button>
-                </div>
-            ) : (
-                <p>No user data available</p>
-            )}
+            <div className="profile-info">
+                <button className="btn btn-danger" onClick={handleLogout}>Log Out</button>
+            </div>
         </div>
     );
 };

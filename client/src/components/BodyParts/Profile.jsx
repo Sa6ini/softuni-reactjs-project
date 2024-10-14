@@ -1,5 +1,46 @@
-import { Link } from "react-router-dom"
+import { Link } from "react-router-dom";
+import { useState } from "react";
+import axios from "axios";
+
 export default function Profile(props) {
+    const [selectedFile, setSelectedFile] = useState(null);
+    const [uploading, setUploading] = useState(false);
+
+    const handleFileChange = (event) => {
+        setSelectedFile(event.target.files[0]);
+    };
+
+    const handleUpload = async () => {
+        if (!selectedFile) {
+            alert('Please select a file to upload');
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append('profilePicture', selectedFile);
+
+        setUploading(true);
+
+        try {
+            const response = await axios.post('http://localhost:3000/api/uploads/profile-picture', formData, {
+                withCredentials: true,
+                headers: { 'Content-Type': 'multipart/form-data' }
+            });
+
+            // Update profile picture
+            props.setUser((prevUser) => ({
+                ...prevUser,
+                profilePicture: response.data.filePath
+            }));
+            alert('Profile picture updated successfully');
+        } catch (err) {
+            console.error('Error uploading file:', err);
+            alert('Error uploading profile picture');
+        } finally {
+            setUploading(false);
+        }
+    };
+
     return (
         <>
             <div className="container-fluid p-5">
@@ -11,21 +52,35 @@ export default function Profile(props) {
                                 src={props.image}
                                 style={{ objectFit: "cover" }}
                             />
-                            <ul className="choose-file nav nav-pills justify-content-between mb-3 ">
-                                <li>
-                                    <button className="mb-4 bg-dark nav-link text-uppercase text-center w-100 active rounded">
-                                        Choose Image
-                                    </button>
-                                </li>
-                                <li>
-                                    <button className="mb-4 nav-link text-uppercase text-center w-100 active rounded">
-                                        Upload Profile Picture
-                                    </button>
-                                </li>
-                            </ul>
-                        </div>
-                        <div>
-                            
+                            <div className="upload-section">
+                                <input
+                                    type="file"
+                                    onChange={handleFileChange}
+                                    disabled={uploading}
+                                    style={{ display: 'none' }}
+                                    id="file-input"
+                                />
+                                <ul className="choose-file nav nav-pills justify-content-between mb-3">
+                                    <li>
+                                        <label
+                                            htmlFor="file-input"
+                                            className="mb-4 bg-dark nav-link text-uppercase text-center w-100 active rounded"
+                                            style={{ cursor: 'pointer' }}
+                                        >
+                                            Choose Image
+                                        </label>
+                                    </li>
+                                    <li>
+                                        <button
+                                            className="mb-4 nav-link text-uppercase text-center w-100 active rounded"
+                                            onClick={handleUpload}
+                                            disabled={uploading}
+                                        >
+                                            {uploading ? 'Uploading...' : 'Upload Profile Picture'}
+                                        </button>
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
                     <div className="col-lg-7">
@@ -67,7 +122,6 @@ export default function Profile(props) {
                                         target="_blank"
                                         className="nav-link text-uppercase text-center w-100"
                                         data-bs-toggle="pill"
-
                                     >
                                         Upload Bio
                                     </a>
@@ -79,7 +133,6 @@ export default function Profile(props) {
                                         Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nam eos nulla ex nostrum consequuntur unde, maxime dolores iure! Voluptate similique saepe, veniam maiores libero error odio voluptatem nam soluta vero? Doloribus sapiente distinctio temporibus totam, quibusdam laudantium perferendis dolores asperiores facere natus ullam delectus veritatis hic aliquam vel earum aut!
                                     </p>
                                 </div>
-
                             </div>
                         </div>
                     </div>

@@ -13,14 +13,23 @@ const port = process.env.PORT || 3000;
 const usersFilePath = path.join(__dirname, 'users.json');
 const profilePicturesPath = path.join(__dirname, '/uploads/profile_pictures');
 
+// Ensure the uploads directory exists
+if (!fs.existsSync(profilePicturesPath)) {
+    fs.mkdirSync(profilePicturesPath, { recursive: true });
+}
+
+// Middleware
 app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(cors({
     origin: 'http://localhost:5173',
-    credentials: true
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization']
 }));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
+// File upload configuration
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         cb(null, profilePicturesPath);
@@ -33,6 +42,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
+// Utility functions
 const readUsers = () => {
     if (!fs.existsSync(usersFilePath)) {
         return [];
@@ -45,14 +55,16 @@ const writeUsers = (users) => {
     fs.writeFileSync(usersFilePath, JSON.stringify(users, null, 2));
 };
 
+// Routes
 app.get('/', (req, res) => {
     res.send('Server is running');
 });
 
+// Register user
 app.post('/api/register', (req, res) => {
     const { fname, email, username, password } = req.body;
     const users = readUsers();
-    const userExists = users.find(user => user.username === username || user.email === email);
+    const userExists = users.some(user => user.username === username || user.email === email);
 
     if (userExists) {
         return res.status(400).json({ message: 'User already exists' });
@@ -73,6 +85,7 @@ app.post('/api/register', (req, res) => {
     res.status(200).json({ message: 'User registered successfully' });
 });
 
+// Login user
 app.post('/api/login', (req, res) => {
     const { username, password } = req.body;
     const users = readUsers();
@@ -90,40 +103,70 @@ app.post('/api/login', (req, res) => {
     });
 
     res.status(200).json({ message: 'User logged in successfully' });
-    console.log(`Setting authToken cookie for user ID: ${user.id}`);
 });
 
-app.get('/api/user/profile-picture/:filename', (req, res) => {
+// Upload profile picture
+// Ensure the profile pictures directory exists
+const fsExtra = require('fs-extra');
+fsExtra.ensureDirSync(profilePicturesPath);
+
+app.post('/api/uploads/profile-picture', upload.single('profilePicture'), (req, res) => {
+    const userId = req.cookies.authToken;
+
+    // Check if the user is authenticated
+    if (!userId) {
+        console.error('User not authenticated');
+        return res.status(401).json({ message: 'Unauthorized' });
+    }
+
+    // Check if a file was uploaded
+    if (!req.file) {
+        console.error('No file uploaded');
+        return res.status(400).json({ message: 'No file uploaded' });
+    }
+
+    const users = readUsers();
+    const user = users.find(user => user.id === userId);
+
+    // Check if the user was found
+    if (!user) {
+        console.error('User not found');
+        return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Update the user's profile picture path
+    user.profilePicture = `/uploads/profile_pictures/${req.file.filename}`;
+    writeUsers(users);
+
+    console.log('Profile picture uploaded successfully:', req.file.filename);
+
+    // Send a response indicating success
+    res.status(200).json({
+        message: 'Profile picture uploaded successfully',
+        filePath: user.profilePicture
+    });
+});
+
+
+
+// Get profile picture
+app.get('/api/uploads/profile_picture/:filename', (req, res) => {
     const filename = req.params.filename;
-    const filePath = path.join(__dirname, 'uploads', 'profile_pictures', filename);
+    const filePath = path.join(profilePicturesPath, filename);
+
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:5173');
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
 
     res.sendFile(filePath, (err) => {
         if (err) {
             console.error('Error sending file:', err);
-            res.status(404).json({ message: 'Profile picture not found' });
+            // Send a default image if the file is not found
+            const defaultImagePath = path.join(__dirname, 'uploads/default-profile.png');
+            res.sendFile(defaultImagePath);
         }
     });
 });
 
-app.get('/uploads/*', (req, res) => {
-
-});
-
-app.get('/api/user', (req, res) => {
-    const userId = req.cookies.authToken;
-    if (userId) {
-        const users = readUsers();
-        const user = users.find(user => user.id === userId);
-
-        if (user) {
-            res.status(200).json({ user: user });
-        } else {
-            res.status(404).json({ message: 'User not found' });
-        }
-    } else {
-        res.status(400).json({ message: 'No cookie found' });
-    }
-});
 app.get('/api/users', (req, res) => {
     const users = readUsers();
     res.status(200).json(users);
@@ -172,8 +215,29 @@ app.post('/api/logout', (req, res) => {
     res.status(200).json({ message: 'User logged out successfully' });
 });
 
-app.use('/uploads', express.static(profilePicturesPath));
 
+
+
+// Get logged-in user details
+app.get('/api/user', (req, res) => {
+    const userId = req.cookies.authToken;
+    if (userId) {
+        const users = readUsers();
+        const user = users.find(user => user.id === userId);
+
+        if (user) {
+            return res.status(200).json({ user });
+        } else {
+            return res.status(404).json({ message: 'User not found' });
+        }
+    } else {
+        return res.status(400).json({ message: 'No authentication cookie found' });
+    }
+});
+
+// Other routes (Get all users, Delete user, Update role, Logout, etc.) can stay the same...
+
+// Start server
 app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);
 });
