@@ -187,6 +187,62 @@ app.put('/api/users/me/bio', (req, res) => {
     }
 });
 
+// Update username
+app.put('/api/users/me/username', (req, res) => {
+    const userId = req.cookies.authToken;
+    const { username } = req.body;
+
+    if (!userId) {
+        return res.status(401).json({ message: 'Unauthorized' });
+    }
+
+    let users = readUsers();
+    const user = users.find(user => user.id === userId);
+
+    if (user) {
+        // Check if the new username already exists
+        const usernameExists = users.some(u => u.username === username);
+        if (usernameExists) {
+            return res.status(400).json({ message: 'Username already taken' });
+        }
+
+        // Update the username
+        user.username = username;
+        writeUsers(users);
+        return res.status(200).json({ message: 'Username updated successfully' });
+    } else {
+        return res.status(404).json({ message: 'User not found' });
+    }
+});
+
+
+app.put('/api/users/me/password', (req, res) => {
+    const userId = req.cookies.authToken;
+    const { oldPassword, newPassword } = req.body;
+
+    if (!userId) {
+        return res.status(401).json({ message: 'Unauthorized' });
+    }
+
+    let users = readUsers();
+    const user = users.find(user => user.id === userId);
+
+    if (user) {
+        // Verify the old password (no hashing, just a plain text comparison)
+        if (user.password !== oldPassword) {
+            return res.status(400).json({ message: 'Current password is incorrect' });
+        }
+
+        // Update the password
+        user.password = newPassword;
+        writeUsers(users);
+        return res.status(200).json({ message: 'Password updated successfully' });
+    } else {
+        return res.status(404).json({ message: 'User not found' });
+    }
+});
+
+
 
 app.get('/api/users', (req, res) => {
     const users = readUsers();
@@ -256,7 +312,6 @@ app.get('/api/user', (req, res) => {
     }
 });
 
-// Other routes (Get all users, Delete user, Update role, Logout, etc.) can stay the same...
 
 // Start server
 app.listen(port, () => {

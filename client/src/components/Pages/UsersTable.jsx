@@ -32,7 +32,7 @@ export default function UsersTable() {
       })
       .catch(error => console.error('Error deleting user:', error));
   };
-  
+
 
   const enterEditMode = (userId, currentRole) => {
     setEditingUserId(userId);
@@ -73,17 +73,28 @@ export default function UsersTable() {
           <table className="table table-bordered table-hover">
             <thead className="thead-dark">
               <tr>
+                <th>Profile Picture</th>
                 <th>Full Name</th>
                 <th>Email</th>
                 <th>Username</th>
                 <th>Role</th>
-                <th>Profile Picture</th>
                 <th>Actions</th>
               </tr>
             </thead>
             <tbody>
               {users.map(user => (
                 <tr key={user.id}>
+                  <td>
+                    {user.profilePicture ? (
+                      <img
+                        src={`http://localhost:3000${user.profilePicture}`}
+                        alt="Profile"
+                        style={{ width: '100px', height: '70px'}}
+                      />
+                    ) : (
+                      'No picture'
+                    )}
+                  </td>
                   <td>{user.fname}</td>
                   <td>{user.email}</td>
                   <td>{user.username}</td>
@@ -101,17 +112,7 @@ export default function UsersTable() {
                       user.role
                     )}
                   </td>
-                  <td>
-                    {user.profilePicture ? (
-                      <img
-                        src={`http://localhost:3000/${user.profilePicture}`}
-                        alt="Profile"
-                        style={{ width: '50px', height: '50px', borderRadius: '50%' }}
-                      />
-                    ) : (
-                      'No picture'
-                    )}
-                  </td>
+
                   <td>
                     {editingUserId === user.id ? (
                       <>
