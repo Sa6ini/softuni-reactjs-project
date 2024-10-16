@@ -30,15 +30,7 @@ const ProfilePage = () => {
         fetchUser();
     }, [navigate]);
 
-    const handleLogout = async () => {
-        try {
-            await axios.post('http://localhost:3000/api/logout', {}, { withCredentials: true });
-            navigate('/login');
-        } catch (err) {
-            console.error('Error logging out:', err);
-            alert('Error logging out');
-        }
-    };
+    
 
     if (loading) return <p>Loading...</p>;
     if (error) return <p>Error: {error}</p>;
@@ -52,13 +44,12 @@ const ProfilePage = () => {
                 username={user.username}
                 email={user.email}
                 role={user.role}
+                bio={user.bio}
                 image={user.profilePicture ? `http://localhost:3000${user.profilePicture}` : './img/default-profile.png'}
                 setUser={setUser}
             />
 
-            <div className="profile-info">
-                <button className="btn btn-danger" onClick={handleLogout}>Log Out</button>
-            </div>
+            
         </div>
     );
 };

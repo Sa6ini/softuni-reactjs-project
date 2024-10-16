@@ -211,6 +211,11 @@ h6,
     padding-top: 135%;
     margin-bottom: 0%;
 }
+.profile-logout{
+    margin-top: 15px;
+    display: flex;
+    justify-content: flex-end;
+}
 @media (min-width: 991.98px) {
     .credit {
         background: var(--primary);

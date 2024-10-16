@@ -5,6 +5,19 @@ import axios from "axios";
 export default function Profile(props) {
     const [selectedFile, setSelectedFile] = useState(null);
     const [uploading, setUploading] = useState(false);
+    const [isEditing, setIsEditing] = useState(false);
+    const [newBio, setNewBio] = useState(props.bio);
+    
+    
+    const handleLogout = async () => {
+        try {
+            await axios.post('http://localhost:3000/api/logout', {}, { withCredentials: true });
+            navigate('/login');
+        } catch (err) {
+            console.error('Error logging out:', err);
+            alert('Error logging out');
+        }
+    };
 
     const handleFileChange = (event) => {
         setSelectedFile(event.target.files[0]);
@@ -27,7 +40,6 @@ export default function Profile(props) {
                 headers: { 'Content-Type': 'multipart/form-data' }
             });
 
-            // Update profile picture
             props.setUser((prevUser) => ({
                 ...prevUser,
                 profilePicture: response.data.filePath
@@ -38,6 +50,26 @@ export default function Profile(props) {
             alert('Error uploading profile picture');
         } finally {
             setUploading(false);
+        }
+    };
+
+    const handleEditBio = () => {
+        setIsEditing(true);
+    };
+
+    const handleSaveBio = async () => {
+        try {
+            const response = await axios.put('http://localhost:3000/api/users/me/bio', { bio: newBio }, { withCredentials: true });
+            console.log(response.data);
+            props.setUser((prevUser) => ({
+                ...prevUser,
+                bio: newBio
+            }));
+            alert('Bio updated successfully');
+            setIsEditing(false);
+        } catch (err) {
+            console.error('Error saving bio:', err);
+            alert('Error saving bio');
         }
     };
 
@@ -88,9 +120,18 @@ export default function Profile(props) {
                             <h5 className="text-primary text-uppercase">Welcome</h5>
                             <h1 className="display-3 text-uppercase mb-0">{props.name}</h1>
                         </div>
-                        <h4 className="text-body mb-4">
-                            <b>Username:</b> {props.username}
-                        </h4>
+                        <ul className="nav nav-pills justify-content-between">
+                            <li>
+                                <h4 className="text-body mb-4">
+                                    <b>Username:</b> {props.username}
+                                </h4>
+                            </li>
+                            <li>
+                                <button className="mb-4 nav-link text-uppercase text-center w-100 active rounded">
+                                    Change Username
+                                </button>
+                            </li>
+                        </ul>
                         <p className="mb-4">
                             <b>Role:</b> {props.role}
                         </p>
@@ -99,45 +140,55 @@ export default function Profile(props) {
                         </p>
                         <ul className="nav nav-pills justify-content-between mb-3">
                             <li>
-                                <button className="mb-4 nav-link text-uppercase text-center w-100 active rounded">
+                                <button 
+                                className="mb-4 nav-link text-uppercase text-center w-100 active rounded"
+                                //onClick={handlePassChange}
+                                >
                                     Change Password
                                 </button>
                             </li>
                         </ul>
-
                         <div className="rounded bg-dark p-5">
                             <ul className="nav nav-pills justify-content-between mb-3">
                                 <li className="nav-item w-50">
-                                    <Link
-                                        to=""
+                                    <button
+                                        onClick={handleEditBio}
                                         className="nav-link text-uppercase text-center w-100 active"
-                                        data-bs-toggle="pill"
                                     >
-                                        Make Bio
-                                    </Link>
+                                        Edit Bio
+                                    </button>
                                 </li>
                                 <li className="nav-item w-50">
-                                    <a
-                                        href=""
-                                        target="_blank"
+                                    <button
+                                        onClick={handleSaveBio}
                                         className="nav-link text-uppercase text-center w-100"
-                                        data-bs-toggle="pill"
+                                        disabled={!isEditing}
                                     >
-                                        Upload Bio
-                                    </a>
+                                        Save Bio
+                                    </button>
                                 </li>
                             </ul>
                             <div className="tab-content">
                                 <div className="tab-pane fade show active" id="pills-1">
-                                    <p className="text-secondary mb-0">
-                                        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nam eos nulla ex nostrum consequuntur unde, maxime dolores iure! Voluptate similique saepe, veniam maiores libero error odio voluptatem nam soluta vero? Doloribus sapiente distinctio temporibus totam, quibusdam laudantium perferendis dolores asperiores facere natus ullam delectus veritatis hic aliquam vel earum aut!
-                                    </p>
+                                    {isEditing ? (
+                                        <input
+                                            type="text"
+                                            value={newBio}
+                                            onChange={(e) => setNewBio(e.target.value)}
+                                            className="form-control mb-3"
+                                        />
+                                    ) : (
+                                        <p className="text-secondary mb-0">{props.bio || "No bio available."}</p>
+                                    )}
                                 </div>
                             </div>
+                        </div>
+                        <div className="profile-logout">
+                            <button className="btn btn-danger" onClick={handleLogout}>Log Out</button>
                         </div>
                     </div>
                 </div>
             </div>
         </>
-    )
+    );
 }

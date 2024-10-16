@@ -77,7 +77,8 @@ app.post('/api/register', (req, res) => {
         username,
         password,
         profilePicture: '',
-        role: 'user'
+        role: 'user',
+        bio
     };
     users.push(newUser);
     writeUsers(users);
@@ -166,6 +167,26 @@ app.get('/api/uploads/profile_picture/:filename', (req, res) => {
         }
     });
 });
+app.put('/api/users/me/bio', (req, res) => {
+    const userId = req.cookies.authToken;
+    const { bio } = req.body;
+
+    if (!userId) {
+        return res.status(401).json({ message: 'Unauthorized' });
+    }
+
+    const users = readUsers();
+    const user = users.find(user => user.id === userId);
+
+    if (user) {
+        user.bio = bio;
+        writeUsers(users);
+        return res.status(200).json({ message: 'Bio updated successfully' });
+    } else {
+        return res.status(404).json({ message: 'User not found' });
+    }
+});
+
 
 app.get('/api/users', (req, res) => {
     const users = readUsers();
